@@ -238,6 +238,7 @@ byte customChar[8] = {
 <pre>
 #include &lt;LiquidCrystal.h&gt;
 
+// initialize the library
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 </pre>
 
@@ -255,17 +256,21 @@ byte customChar[8] = {
 </pre>
 
 <pre>
-void setup() {
-  // create a new character
-  lcd.createChar(0, heart);
+void setup()
+{
+  // create a new custom character
+  lcd.createChar(0, customChar);
   
-  // set up the lcd's number of columns and rows: 
+  // set up number of columns and rows
   lcd.begin(16, 2);
-  // Print a message to the lcd.
-  lcd.write(0);
+
+  // print the custom char to the lcd
+  lcd.write((uint8_t)0);
+  // why typecast? see: http://arduino.cc/forum/index.php?topic=74666.0
 }
 
-void loop() {
+void loop()
+{
   
 }
 </pre>
