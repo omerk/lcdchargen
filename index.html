@@ -68,102 +68,102 @@ pre {
 
 </style>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script>
 
-  // Create a 2D array for the custom char
-  var customchar = new Array(8);
-  for (i=0; i <8; i++){
+// Create a 2D array for the custom char
+var customchar = new Array(8);
+for (i = 0; i < 8; i++) {
     customchar[i] = new Array(5);
-  }
+}
 
-  function clear(){
+function clear() {
     // Clear array
-    for (i=0; i <8; i++){
-      for (j=0; j<5; j++){
-        customchar[i][j] = 0;
-      }
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 5; j++) {
+            customchar[i][j] = 0;
+        }
     }
 
     // Reset pixels
     $(".pixel").addClass('off');
     $(".pixel").removeClass('on');
-  }
+}
 
-  function togglePixel(pixel){
+function togglePixel(pixel) {
     // Get row/column of pixel from the ID
     var id = $(pixel).attr('id').split("-");
     var row = id[1];
     var column = id[2];
 
     // Toggle pixels and update array
-    if ( $(pixel).hasClass('off') ){
-      $(pixel).addClass('on');
-      $(pixel).removeClass('off');
-      customchar[row][column] = 1;
+    if ($(pixel).hasClass('off')) {
+        $(pixel).addClass('on');
+        $(pixel).removeClass('off');
+        customchar[row][column] = 1;
     } else {
-      $(pixel).addClass('off');
-      $(pixel).removeClass('on');
-      customchar[row][column] = 0;
+        $(pixel).addClass('off');
+        $(pixel).removeClass('on');
+        customchar[row][column] = 0;
     }
-  }
+}
 
-  function invert(){
+function invert() {
     // Toggle all pixels
     $('.pixel').each(function(index) {
-      togglePixel( $(this) );
+        togglePixel($(this));
     });
-  }
+}
 
-  function generateOutput(data){
+function generateOutput(data) {
     // Create output
     var output = 'byte customChar[8] = {\n';
-    for (i=0; i<8; i++){
-      output += '\t0b';
-      for (j=0; j<5; j++){
-        output += customchar[i][j];
-      }
-      if (i<7){
-        output += ',\n';
-      }
+    for (i = 0; i < 8; i++) {
+        output += '\t0b';
+        for (j = 0; j < 5; j++) {
+            output += customchar[i][j];
+        }
+        if (i < 7) {
+            output += ',\n';
+        }
     }
     output += '\n};';
 
     // Update the code display
     $('.output').text(output);
-  }
+}
 
 
-  $(document).ready(function() {
+$(document).ready(function() {
     // Clear/initialise the pixels and array
     clear();
 
     // Disable selection of pixels (cosmetic)
     $('#pixels').mousedown(function() {
-      return false;
+        return false;
     });
 
     // Bind a click event listener to the clear button
     $('#clear').click(function() {
-      clear();
-      generateOutput();
+        clear();
+        generateOutput();
     });
 
     // Bind a click event listener to the invert button
     $('#invert').click(function() {
-      invert();
-      generateOutput();
+        invert();
+        generateOutput();
     });
 
     // Bind a click event listener to pixels
     $(".pixel").click(function() {
-      // Toggle pixels
-      togglePixel( $(this) );
+        // Toggle pixels
+        togglePixel($(this));
 
-      // Output code
-      generateOutput();
+        // Output code
+        generateOutput();
     });
-  });
+});
 
 </script>
 
