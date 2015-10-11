@@ -14,225 +14,241 @@ this stuff is worth it, you can buy me a beer in return. Omer Kilic
 -->
 
 <html>
+
 <head>
-<meta charset=utf-8 />
-<title>Custom Character Generator for HD44780 LCD Modules</title>
-<style type="text/css">
-
-body {
-  text-align: center;
-}
-
-pre {
-  margin-left: 25px;
-  text-align: left;
-}
-
-#wrapper {
-  width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#pixels {
-  width: 200px;
-  float: left;
-}
-
-
-#code {
-  width: 200px;
-  float: left;
-}
-
-#arduino {
-  padding-top: 30px;
-  clear:both;
-}
-
-
-.pixel {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #ccc;
-}
-
-.off {
-  background: #5EFB6E;
-}
-
-.on {
-  background: #484848;
-}
-
-
-</style>
-
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script>
-
-// Create a 2D array for the custom char
-var customchar = new Array(8);
-for (i = 0; i < 8; i++) {
-    customchar[i] = new Array(5);
-}
-
-function clear() {
-    // Clear array
-    for (i = 0; i < 8; i++) {
-        for (j = 0; j < 5; j++) {
-            customchar[i][j] = 0;
+    <meta charset=utf-8 />
+    <title>Custom Character Generator for HD44780 LCD Modules</title>
+    <style type="text/css">
+        body {
+            text-align: center;
         }
-    }
-
-    // Reset pixels
-    $(".pixel").addClass('off');
-    $(".pixel").removeClass('on');
-}
-
-function togglePixel(pixel) {
-    // Get row/column of pixel from the ID
-    var id = $(pixel).attr('id').split("-");
-    var row = id[1];
-    var column = id[2];
-
-    // Toggle pixels and update array
-    if ($(pixel).hasClass('off')) {
-        $(pixel).addClass('on');
-        $(pixel).removeClass('off');
-        customchar[row][column] = 1;
-    } else {
-        $(pixel).addClass('off');
-        $(pixel).removeClass('on');
-        customchar[row][column] = 0;
-    }
-}
-
-function invert() {
-    // Toggle all pixels
-    $('.pixel').each(function(index) {
-        togglePixel($(this));
-    });
-}
-
-function generateOutput(data) {
-    // Create output
-    var output = 'byte customChar[8] = {\n';
-    for (i = 0; i < 8; i++) {
-        output += '\t0b';
-        for (j = 0; j < 5; j++) {
-            output += customchar[i][j];
+        
+        pre {
+            margin-left: 25px;
+            text-align: left;
         }
-        if (i < 7) {
-            output += ',\n';
+        
+        table {
+            width: 100%;
         }
-    }
-    output += '\n};';
+        
+        #wrapper {
+            width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #pixels {
+            width: 200px;
+            float: left;
+        }
+        
+        #code {
+            width: 200px;
+            float: left;
+        }
+        
+        #pins {
+            padding-top: 3em;
+            clear: both;
+        }
+        
+        #arduino {
+            padding-top: 30px;
+            clear: both;
+        }
+        
+        .pixel {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+        }
+        
+        .off {
+            background: #5EFB6E;
+        }
+        
+        .on {
+            background: #484848;
+        }
+    </style>
 
-    // Update the code display
-    $('.output').text(output);
-}
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script>
+    
+        // Create a 2D array for the custom char
+        var customchar = new Array(8);
+        for (i = 0; i < 8; i++) {
+            customchar[i] = new Array(5);
+        }
+
+        function clear() {
+        
+            // Clear array
+            for (i = 0; i < 8; i++) {
+                for (j = 0; j < 5; j++) {
+                    customchar[i][j] = 0;
+                }
+            }
+
+            // Reset pixels
+            $(".pixel").addClass('off');
+            $(".pixel").removeClass('on');
+        }
+
+        function togglePixel(pixel) {
+        
+            // Get row/column of pixel from the ID
+            var id = $(pixel).attr('id').split("-");
+            var row = id[1];
+            var column = id[2];
+
+            // Toggle pixels and update array
+            if ($(pixel).hasClass('off')) {
+                $(pixel).addClass('on');
+                $(pixel).removeClass('off');
+                customchar[row][column] = 1;
+            } else {
+                $(pixel).addClass('off');
+                $(pixel).removeClass('on');
+                customchar[row][column] = 0;
+            }
+        }
+
+        function invert() {
+        
+            // Toggle all pixels
+            $('.pixel').each(function(index) {
+                togglePixel($(this));
+            });
+        }
+
+        function generateOutput(data) {
+        
+            // Create output
+            var output = 'byte customChar[8] = {\n';
+            for (i = 0; i < 8; i++) {
+                output += '\t0b';
+                for (j = 0; j < 5; j++) {
+                    output += customchar[i][j];
+                }
+                if (i < 7) {
+                    output += ',\n';
+                }
+            }
+            output += '\n};';
+
+            // Update the code display
+            $('.output').text(output);
+        }
 
 
-$(document).ready(function() {
-    // Clear/initialise the pixels and array
-    clear();
+        $(document).ready(function() {
+        
+            // Clear/initialise the pixels and array
+            clear();
 
-    // Disable selection of pixels (cosmetic)
-    $('#pixels').mousedown(function() {
-        return false;
-    });
+            // Disable selection of pixels (cosmetic)
+            $('#pixels').mousedown(function() {
+                return false;
+            });
 
-    // Bind a click event listener to the clear button
-    $('#clear').click(function() {
-        clear();
-        generateOutput();
-    });
+            // Bind a click event listener to the clear button
+            $('#clear').click(function() {
+                clear();
+                generateOutput();
+            });
 
-    // Bind a click event listener to the invert button
-    $('#invert').click(function() {
-        invert();
-        generateOutput();
-    });
+            // Bind a click event listener to the invert button
+            $('#invert').click(function() {
+                invert();
+                generateOutput();
+            });
 
-    // Bind a click event listener to pixels
-    $(".pixel").click(function() {
-        // Toggle pixels
-        togglePixel($(this));
+            // Bind a click event listener to pixels
+            $(".pixel").click(function() {
+            
+                // Toggle pixels
+                togglePixel($(this));
 
-        // Output code
-        generateOutput();
-    });
-});
+                // Output code
+                generateOutput();
+            });
 
-</script>
+            // Bind a change event listener to every numerical pin inputs
+            $(".pinChange").on("change", function() {
+            
+                // Change the output code that deals with the lcd (pin) initialization
+                $(".initPins").text("LiquidCrystal lcd(" + $("#RSPin").val() + ", " + $("#EnablePin").val() + ", " + $("#D4Pin").val() + ", " + $("#D5Pin").val() + ", " + $("#D6Pin").val() + ", " + $("#D7Pin").val() + ");");
+            });
+        });
+    </script>
 
 </head>
 
 <body>
-<h1>Custom Character Generator<br />for HD44780 LCD Modules</h1>
-<span>Click pixels to generate output.</span>
+    <h1>Custom Character Generator<br />for HD44780 LCD Modules</h1>
+    <span>Click pixels to generate output.</span>
 
-<div id="wrapper">
-	<div id="pixels">
-	<h2>Pixels</h2>
-		<canvas id="pixel-0-0" class="pixel off"></canvas>
-		<canvas id="pixel-0-1" class="pixel off"></canvas>
-		<canvas id="pixel-0-2" class="pixel off"></canvas>
-		<canvas id="pixel-0-3" class="pixel off"></canvas>
-		<canvas id="pixel-0-4" class="pixel off"></canvas>
-		<br />
-		<canvas id="pixel-1-0" class="pixel off"></canvas>
-		<canvas id="pixel-1-1" class="pixel off"></canvas>
-		<canvas id="pixel-1-2" class="pixel off"></canvas>
-		<canvas id="pixel-1-3" class="pixel off"></canvas>
-		<canvas id="pixel-1-4" class="pixel off"></canvas>
-		<br />
-		<canvas id="pixel-2-0" class="pixel off"></canvas>
-		<canvas id="pixel-2-1" class="pixel off"></canvas>
-		<canvas id="pixel-2-2" class="pixel off"></canvas>
-		<canvas id="pixel-2-3" class="pixel off"></canvas>
-		<canvas id="pixel-2-4" class="pixel off"></canvas>
-		<br />
-		<canvas id="pixel-3-0" class="pixel off"></canvas>
-		<canvas id="pixel-3-1" class="pixel off"></canvas>
-		<canvas id="pixel-3-2" class="pixel off"></canvas>
-		<canvas id="pixel-3-3" class="pixel off"></canvas>
-		<canvas id="pixel-3-4" class="pixel off"></canvas>
-		<br />
-		<canvas id="pixel-4-0" class="pixel off"></canvas>
-		<canvas id="pixel-4-1" class="pixel off"></canvas>
-		<canvas id="pixel-4-2" class="pixel off"></canvas>
-		<canvas id="pixel-4-3" class="pixel off"></canvas>
-		<canvas id="pixel-4-4" class="pixel off"></canvas>
-		<br />
-		<canvas id="pixel-5-0" class="pixel off"></canvas>
-		<canvas id="pixel-5-1" class="pixel off"></canvas>
-		<canvas id="pixel-5-2" class="pixel off"></canvas>
-		<canvas id="pixel-5-3" class="pixel off"></canvas>
-		<canvas id="pixel-5-4" class="pixel off"></canvas>
-		<br />
-		<canvas id="pixel-6-0" class="pixel off"></canvas>
-		<canvas id="pixel-6-1" class="pixel off"></canvas>
-		<canvas id="pixel-6-2" class="pixel off"></canvas>
-		<canvas id="pixel-6-3" class="pixel off"></canvas>
-		<canvas id="pixel-6-4" class="pixel off"></canvas>
-		<br />
-		<canvas id="pixel-7-0" class="pixel off"></canvas>
-		<canvas id="pixel-7-1" class="pixel off"></canvas>
-		<canvas id="pixel-7-2" class="pixel off"></canvas>
-		<canvas id="pixel-7-3" class="pixel off"></canvas>
-		<canvas id="pixel-7-4" class="pixel off"></canvas>
-		<br />
-	
-		<button id="clear" type="button">Clear</button>
-		<button id="invert" type="button">Invert</button>
+    <div id="wrapper">
+        <div id="pixels">
+            <h2>Pixels</h2>
+            <canvas id="pixel-0-0" class="pixel off"></canvas>
+            <canvas id="pixel-0-1" class="pixel off"></canvas>
+            <canvas id="pixel-0-2" class="pixel off"></canvas>
+            <canvas id="pixel-0-3" class="pixel off"></canvas>
+            <canvas id="pixel-0-4" class="pixel off"></canvas>
+            <br />
+            <canvas id="pixel-1-0" class="pixel off"></canvas>
+            <canvas id="pixel-1-1" class="pixel off"></canvas>
+            <canvas id="pixel-1-2" class="pixel off"></canvas>
+            <canvas id="pixel-1-3" class="pixel off"></canvas>
+            <canvas id="pixel-1-4" class="pixel off"></canvas>
+            <br />
+            <canvas id="pixel-2-0" class="pixel off"></canvas>
+            <canvas id="pixel-2-1" class="pixel off"></canvas>
+            <canvas id="pixel-2-2" class="pixel off"></canvas>
+            <canvas id="pixel-2-3" class="pixel off"></canvas>
+            <canvas id="pixel-2-4" class="pixel off"></canvas>
+            <br />
+            <canvas id="pixel-3-0" class="pixel off"></canvas>
+            <canvas id="pixel-3-1" class="pixel off"></canvas>
+            <canvas id="pixel-3-2" class="pixel off"></canvas>
+            <canvas id="pixel-3-3" class="pixel off"></canvas>
+            <canvas id="pixel-3-4" class="pixel off"></canvas>
+            <br />
+            <canvas id="pixel-4-0" class="pixel off"></canvas>
+            <canvas id="pixel-4-1" class="pixel off"></canvas>
+            <canvas id="pixel-4-2" class="pixel off"></canvas>
+            <canvas id="pixel-4-3" class="pixel off"></canvas>
+            <canvas id="pixel-4-4" class="pixel off"></canvas>
+            <br />
+            <canvas id="pixel-5-0" class="pixel off"></canvas>
+            <canvas id="pixel-5-1" class="pixel off"></canvas>
+            <canvas id="pixel-5-2" class="pixel off"></canvas>
+            <canvas id="pixel-5-3" class="pixel off"></canvas>
+            <canvas id="pixel-5-4" class="pixel off"></canvas>
+            <br />
+            <canvas id="pixel-6-0" class="pixel off"></canvas>
+            <canvas id="pixel-6-1" class="pixel off"></canvas>
+            <canvas id="pixel-6-2" class="pixel off"></canvas>
+            <canvas id="pixel-6-3" class="pixel off"></canvas>
+            <canvas id="pixel-6-4" class="pixel off"></canvas>
+            <br />
+            <canvas id="pixel-7-0" class="pixel off"></canvas>
+            <canvas id="pixel-7-1" class="pixel off"></canvas>
+            <canvas id="pixel-7-2" class="pixel off"></canvas>
+            <canvas id="pixel-7-3" class="pixel off"></canvas>
+            <canvas id="pixel-7-4" class="pixel off"></canvas>
+            <br />
 
-	</div>
+            <button id="clear" type="button">Clear</button>
+            <button id="invert" type="button">Invert</button>
 
-	<div id="code">
-		<h2>Output</h2>
-<pre class="output">
+        </div>
+        <div id="code">
+            <h2>Output</h2>
+            <pre class="output">
 byte customChar[8] = {
 	0b00000,
 	0b00000,
@@ -243,20 +259,71 @@ byte customChar[8] = {
 	0b00000,
 	0b00000
 };
-</pre>
-	</div>
-
-	<div id="arduino">
-	<h2>Example Arduino Sketch</h2>
-<span><a href="http://www.arduino.cc/en/Reference/LiquidCrystal">(LiquidCrystal library reference)</a></span>
-<pre>
+            </pre>
+        </div>
+        <div id="pins">
+            <table>
+                <thead>
+                    <tr>
+                        <th>LCD Module</th>
+                        <th align="center">Arduino Pin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>RS</td>
+                        <td align="center">
+                            <input type="number" min="0" max="13" value="12" id="RSPin" class="pinChange">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RW</td>
+                        <td align="center">GND</td>
+                    </tr>
+                    <tr>
+                        <td>Enable</td>
+                        <td align="center">
+                            <input type="number" min="0" max="13" value="11" id="EnablePin" class="pinChange">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D4</td>
+                        <td align="center">
+                            <input type="number" min="0" max="13" value="5" id="D4Pin" class="pinChange">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D5</td>
+                        <td align="center">
+                            <input type="number" min="0" max="13" value="4" id="D5Pin" class="pinChange">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D6</td>
+                        <td align="center">
+                            <input type="number" min="0" max="13" value="3" id="D6Pin" class="pinChange">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D7</td>
+                        <td align="center">
+                            <input type="number" min="0" max="13" value="2" id="D7Pin" class="pinChange">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="arduino">
+            <h2>Example Arduino Sketch</h2>
+            <span><a href="http://www.arduino.cc/en/Reference/LiquidCrystal">(LiquidCrystal library reference)</a></span>
+            <pre>
 #include &lt;LiquidCrystal.h&gt;
 
 // initialize the library
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-</pre>
+<span class="initPins">LiquidCrystal lcd(12, 11, 5, 4, 3, 2);</span>
+            </pre>
 
-<pre class="output">
+            <pre class="output">
 byte customChar[8] = {
 	0b00000,
 	0b00000,
@@ -267,9 +334,9 @@ byte customChar[8] = {
 	0b00000,
 	0b00000
 };
-</pre>
+            </pre>
 
-<pre>
+            <pre>
 void setup()
 {
   // create a new custom character
@@ -279,18 +346,18 @@ void setup()
   lcd.begin(16, 2);
 
   // print the custom char to the lcd
-  lcd.write((uint8_t)0);
   // why typecast? see: http://arduino.cc/forum/index.php?topic=74666.0
+  lcd.write((uint8_t)0);
 }
 
 void loop()
 {
   
 }
-</pre>
+            </pre>
 
-	</div>
-</div>
+        </div>
+    </div>
 </body>
 
 
