@@ -8,7 +8,7 @@ The generator is available [here](http://omerk.github.com/lcdchargen/).
 
 Click on the blocks to create a custom character which will automatically generate output.
 
-The example Arduino code generated assumes the following connections:
+The example Arduino code generated defaults with the following connections:
 
 
 | LCD Module    | Arduino Pin   |
