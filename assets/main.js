@@ -77,7 +77,7 @@ void setup()
 \tlcd.createChar(0, customChar);
 
 \t// set up number of columns and rows
-\n\tlcd.begin(16, 2);
+\tlcd.begin(16, 2);
 
 \t// print the custom char to the lcd
 \t// why typecast? see: http://arduino.cc/forum/index.php?topic=74666.0
