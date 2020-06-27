@@ -1,0 +1,29 @@
+#pixels,
+#code,
+#pins,
+#arduino {
+    padding-top: 30px;
+}
+
+pre {
+    text-align: left;
+}
+
+.jumbotron,
+.tab-content>span {
+    text-align: center !important;
+}
+
+.pixel {
+    width : 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+}
+
+.off {
+    background: #5EFB6E;
+}
+
+.on {
+    background: #484848;
+}
