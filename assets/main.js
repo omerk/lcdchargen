@@ -47,7 +47,7 @@ function invert() {
 
 function generateOutput(data) {
     // Create output
-    var output = 'byte customChar[8] = {\n';
+    var output = '// C/C++ code\nbyte customChar[8] = {\n';
     for (i = 0; i < 8; i++) {
         output += '\t0b';
         for (j = 0; j < 5; j++) {
@@ -58,6 +58,20 @@ function generateOutput(data) {
         }
     }
     output += '\n};';
+
+    var python_code = '\n\n# Python code\ncustom_char = (\n';
+    for (i = 0; i < 8; i++) {
+        python_code += '\t0b';
+        for (j = 0; j < 5; j++) {
+            python_code += customchar[i][j];
+        }
+        if (i < 7) {
+            python_code += ',\n';
+        }
+    }
+    python_code += '\n)\n';
+    python_code += 'lcd.create_char(0, custom_char)  # for use with https://github.com/dbrgn/RPLCD';
+    output += python_code;
 
     // Update the code display
     $('.output').text(output);
